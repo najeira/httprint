@@ -15,13 +15,22 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "hello")
 }
 
+//noinspection GoUnhandledErrorResult
 func main() {
 	httprint.Enable = true
 	httprint.PrintHeader = true
 	httprint.Output = os.Stdout
 
-	http.HandleFunc("/", httprint.WrapHandlerFunc(hello))
+	const addr = ":8080"
 
-	//noinspection ALL
-	http.ListenAndServe(":8080", nil)
+	if true {
+		http.HandleFunc("/", httprint.WrapHandlerFunc(hello))
+		http.ListenAndServe(addr, nil)
+	} else {
+		// HandlerFuncにつけてまわれないときはこっち
+		http.HandleFunc("/", hello)
+
+		server := httprint.WrapHandler(http.DefaultServeMux)
+		http.ListenAndServe(addr, server)
+	}
 }
