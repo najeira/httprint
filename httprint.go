@@ -171,6 +171,15 @@ func WrapHandlerFunc(handler http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func WrapHandler(handler http.Handler) http.Handler {
+	if !Enable {
+		return handler
+	}
+
+	// http.HandlerFunc is http.Handler
+	return WrapHandlerFunc(handler.ServeHTTP)
+}
+
 func Print(r *http.Request, args ...interface{}) {
 	logPrint(r, fmt.Sprint(args...))
 }
