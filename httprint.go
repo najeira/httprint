@@ -148,7 +148,7 @@ func getRequestLogger() *requestLogger {
 	return &requestLogger{}
 }
 
-func WrapHandler(handler http.HandlerFunc) http.HandlerFunc {
+func WrapHandlerFunc(handler http.HandlerFunc) http.HandlerFunc {
 	if !Enable {
 		return handler
 	}
