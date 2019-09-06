@@ -128,6 +128,8 @@ func (g *requestLogger) reset() {
 }
 
 func putRequestLogger(g *requestLogger) {
+	g.reset()
+
 	// あまりにも大きなロガーはプールに入れない
 	if g.buf.Cap() > recycleLimit {
 		return
@@ -153,10 +155,7 @@ func WrapHandler(handler http.HandlerFunc) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		g := getRequestLogger()
-		defer func() {
-			g.reset()
-			putRequestLogger(g)
-		}()
+		defer putRequestLogger(g)
 
 		// ロガーをcontextに入れる
 		ctx := r.Context()
