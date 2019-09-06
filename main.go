@@ -66,7 +66,8 @@ func (g *requestLogger) dumpRequest(r *http.Request, start time.Time) {
 		return
 	}
 
-	duration := time.Now().Sub(start)
+	duration := time.Now().Sub(start) / time.Millisecond
+	reqTime := start.Format(TimeFormat)
 
 	outMu.Lock()
 	defer outMu.Unlock()
@@ -76,11 +77,11 @@ func (g *requestLogger) dumpRequest(r *http.Request, start time.Time) {
 		"method:%s\t"+
 		"path:%s\t"+
 		"reqtime:%dms",
-		start.Format(TimeFormat),
+		reqTime,
 		r.RemoteAddr,
 		r.Method,
 		r.RequestURI,
-		duration/time.Millisecond,
+		duration,
 	)
 
 	//noinspection GoBoolExpressions
