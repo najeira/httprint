@@ -20,7 +20,7 @@ func main() {
 	httprint.PrintHeader = true
 	httprint.Output = os.Stdout
 
-	http.HandleFunc("/", httprint.WrapHandler(hello))
+	http.HandleFunc("/", httprint.WrapHandlerFunc(hello))
 
 	//noinspection ALL
 	http.ListenAndServe(":8080", nil)
